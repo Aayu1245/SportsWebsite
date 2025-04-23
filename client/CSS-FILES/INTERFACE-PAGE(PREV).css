@@ -1,0 +1,113 @@
+*{
+    margin: o;
+    padding: 0;
+}
+
+.nav-container{
+    margin: auto;
+    position: relative;
+    width: 95vw;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.19);
+    display: flex;
+    border-radius: 10px;
+    height: 60px;
+    background-color: #333;
+
+}
+
+.nav-bar{
+    position: absolute;
+    right: 30px;
+}
+
+nav ul li{
+    list-style: none;
+    margin: 10px;
+    color: #F0F0F0;
+    transition: font-size 0.125s;
+}
+
+nav ul li:hover{
+    cursor: pointer;
+    font-size: larger;
+    font-weight: bold;
+    color: #FF4500;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.nav-item{
+    display: flex;
+    margin: 10px;
+}
+
+/* Reset default link styles */
+nav ul li a {
+    text-decoration: none; 
+    color: inherit;        
+    font-size: inherit;    
+}
+
+.card{
+    margin: auto;
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+}
+
+.cards:hover{
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s;
+}
+
+.cricket-card{
+    width: 25vw;
+    height: 25vw;
+    margin: auto;
+    margin-top: 9vh;
+    background-color: #F0F0F0;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.cricket-image{
+    width: 100%;
+    height: 100%;
+    border-radius: 10px 10px 0 0;
+    object-fit: cover;
+}
+.football-card{
+    width: 25vw;
+    height: 25vw;
+    margin: auto;
+    margin-top: 9vh;
+    background-color: #F0F0F0;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.football-image{
+    width: 100%;
+    height: 100%;
+    border-radius: 10px 10px 0 0;
+    object-fit: cover;
+}
+.chess-card{
+    width: 25vw;
+    height: 25vw;
+    margin: auto;
+    margin-top: 9vh;
+    background-color: #F0F0F0;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.chess-image{
+    width: 100%;
+    height: 100%;
+    border-radius: 10px 10px 0 0;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 10px;
+}

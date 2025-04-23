@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Football Matches</title>
+</head>
+<link rel="stylesheet" href="../CSS-FILES/FOOTBALL-STYLE.css">
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Football Matches</h1>
+        </header>
+
+        <nav class="match-nav">
+            <button class="nav-button active">Live</button>
+            <button class="nav-button">Upcoming</button>
+            <button class="nav-button">Completed</button>
+        </nav>
+
+        <div class="matches-grid">
+            <!-- Live Matches -->
+            <a href="scoreboard.html" class="match-card">
+                <div class="match-status live">LIVE</div>
+                <div class="teams-container">
+                    <div class="team-row">
+                        <div class="team-info">
+                            <img src="https://via.placeholder.com/60" class="team-logo-sm" alt="Team A">
+                            <span>Manchester City</span>
+                            <div class="score-preview">2</div>
+                        </div>
+                        <div class="team-info">
+                            <img src="https://via.placeholder.com/60" class="team-logo-sm" alt="Team B">
+                            <span>Liverpool FC</span>
+                            <div class="score-preview">1</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="match-time">60' Playing Now</div>
+            </a>
+
+            <!-- Upcoming Match -->
+            <a href="#" class="match-card">
+                <div class="match-status upcoming">UPCOMING</div>
+                <div class="teams-container">
+                    <div class="team-row">
+                        <div class="team-info">
+                            <img src="https://via.placeholder.com/60" class="team-logo-sm" alt="Team C">
+                            <span>Chelsea FC</span>
+                        </div>
+                        <div class="vs-text">VS</div>
+                        <div class="team-info">
+                            <img src="https://via.placeholder.com/60" class="team-logo-sm" alt="Team D">
+                            <span>Arsenal FC</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="match-time">Sat 3:00 PM GMT</div>
+            </a>
+
+            <!-- Completed Match -->
+            <a href="#" class="match-card">
+                <div class="match-status completed">COMPLETED</div>
+                <div class="teams-container">
+                    <div class="team-row">
+                        <div class="team-info">
+                            <img src="https://via.placeholder.com/60" class="team-logo-sm" alt="Team E">
+                            <span>Real Madrid</span>
+                            <div class="score-preview">3</div>
+                        </div>
+                        <div class="team-info">
+                            <img src="https://via.placeholder.com/60" class="team-logo-sm" alt="Team F">
+                            <span>Barcelona</span>
+                            <div class="score-preview">0</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="match-time">Full Time</div>
+            </a>
+        </div>
+    </div>
+
+    <script src="../JAVA_SCRIPT-FILES/FootBallScoreCard.js"></script>
+</body>
+</html>

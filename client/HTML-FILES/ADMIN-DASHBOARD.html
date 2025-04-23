@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="../CSS-FILES/ADMIN-DASHBOARD.css" />
+</head>
+<body>
+  <header>
+    <h1>Admin Dashboard</h1>
+    <button id="logout">Logout</button>
+  </header>
+
+  <section class="form-section">
+    <h2>Add New Match Data</h2>
+    <form id="match-form1">
+      <!-- Sport Selection -->
+      <label for="sport">Select Sport:</label>
+      <select id="sport" required>
+        <option value="">Select Sport</option>
+        <option value="Cricket">Cricket</option>
+        <option value="Football">Football</option>
+        <option value="Kabbadi">Kabbadi</option>
+      </select>
+      <br />
+
+      <!-- Team 1 Details -->
+      <label for="team1-name">Team 1 Name:</label>
+      <input type="text" id="team1-name" required />
+      <div id="team1-players" class="players-container">
+        <h3>Team 1 Players</h3>
+        <!-- Dynamic player fields will be added here -->
+      </div>
+      <button type="button" id="add-team1-player">Add Player to Team 1</button>
+      <br />
+
+      <!-- Team 2 Details -->
+      <label for="team2-name">Team 2 Name:</label>
+      <input type="text" id="team2-name" required />
+      <div id="team2-players" class="players-container">
+        <h3>Team 2 Players</h3>
+        <!-- Dynamic player fields will be added here -->
+      </div>
+      <button type="button" id="add-team2-player">Add Player to Team 2</button>
+      <br />
+
+      
+
+      <button id='matchform' type="submit">Add Match Data</button>
+    </form>
+  </section>
+
+  <section class="display-section">
+    <h2>Existing Matches</h2>
+    <div id="matches-container">
+      <!-- Match cards will be dynamically inserted here -->
+    </div>
+  </section>
+
+  <script src="../JAVA_SCRIPT-FILES/ADMIN-DASHBOARD.js"></script>
+</body>
+</html>

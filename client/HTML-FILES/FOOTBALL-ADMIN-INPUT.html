@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Football Match Admin</title>
+    <link rel="stylesheet" href="../CSS-FILES/FOOTBALL-ADMIN-INPUT.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Football Match Admin</h1>
+        
+        <div class="scoreboard">
+            <div class="team-score" id="team1-score">
+                <h2>Team A</h2>
+                <div class="score">0</div>
+            </div>
+            <div class="vs">VS</div>
+            <div class="team-score" id="team2-score">
+                <h2>Team B</h2>
+                <div class="score">0</div>
+            </div>
+        </div>
+        
+        
+        <div class="teams-tables">
+            <div class="team-table team-a">
+                <h2>Team A Players</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>Name</th>
+                            <th>Actions</th>
+                            <th>Options</th>
+                        </tr>
+                    </thead>
+                    <tbody id="team1-players">
+                        <!-- Players will be added here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="team-table team-b">
+                <h2>Team B Players</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>Name</th>
+                            <th>Actions</th>
+                            <th>Options</th>
+                        </tr>
+                    </thead>
+                    <tbody id="team2-players">
+                        <!-- Players will be added here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="match-events">
+            <h3>Match Events</h3>
+            <div class="events-log" id="events-log">
+                <!-- Events will be added here -->
+            </div>
+        </div>
+        
+        <div class="modal" id="action-modal">
+            <div class="modal-content">
+                <span class="close-btn">&times;</span>
+                <h3 id="player-name">Player Name</h3>
+                <div class="action-buttons">
+                    <button class="action-btn goal" data-action="goal">
+                        <i class="fas fa-futbol"></i> Goal
+                    </button>
+                    <button class="action-btn foul" data-action="foul">
+                        <i class="fas fa-exclamation-triangle"></i> Foul
+                    </button>
+                    <button class="action-btn yellow" data-action="yellow">
+                        <i class="fas fa-square yellow-card"></i> Yellow Card
+                    </button>
+                    <button class="action-btn red" data-action="red">
+                        <i class="fas fa-square red-card"></i> Red Card
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="../JAVA_SCRIPT-FILES/FOOTBALL-ADMIN-INPUT.js"></script>
+</body>
+</html>

@@ -1,0 +1,119 @@
+:root {
+    --dark-bg: #0a0e1a;
+    --glass-bg: rgba(15, 25, 40, 0.9);
+    --text-light: #f0f4fc;
+    --accent-green: #00e676;
+    --primary-blue: #0066ff;
+    --neon-shadow: 0 0 20px rgba(0, 230, 118, 0.3);
+}
+
+body {
+    margin: 0;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: radial-gradient(ellipse at center, #00203F, #000000);
+    color: var(--text-light);
+    min-height: 100vh;
+}
+
+.nav-container {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    padding: 1rem;
+    box-shadow: var(--neon-shadow);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.nav-bar ul.nav-item {
+    display: flex;
+    justify-content: flex-end;
+    gap: 2rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-bar ul.nav-item li {
+    color: var(--text-light);
+    cursor: pointer;
+    padding: 0.8rem 1.2rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.nav-bar ul.nav-item li:hover {
+    background: rgba(255,255,255,0.1);
+    text-shadow: var(--neon-shadow);
+}
+
+#LOGIN-PAGE, #ADMIN-LOGIN-PAGE {
+    color: var(--accent-green);
+    text-decoration: none;
+    border: 2px solid var(--accent-green);
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    transition: all 0.3s ease;
+}
+
+#LOGIN-PAGE:hover, #ADMIN-LOGIN-PAGE:hover {
+    background: var(--accent-green);
+    color: var(--dark-bg);
+}
+
+#card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 2rem auto;
+}
+
+.cards {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: transform 0.3s ease;
+    cursor: pointer;
+    text-align: center;
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.cards:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--neon-shadow);
+}
+
+.cards img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    border: 2px solid rgba(255,255,255,0.1);
+}
+
+.kabbadi-title, .football-title, .basketball-title {
+    font-size: 1.5rem;
+    margin: 0;
+    background: linear-gradient(45deg, var(--accent-green), var(--primary-blue));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+@media (max-width: 768px) {
+    #card-container {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+    }
+    
+    .nav-bar ul.nav-item {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+    }
+}
