@@ -1,0 +1,19 @@
+title: Sports Website
+description: Live sports updates and scorecards
+baseurl: "" # leave empty if deploying to root of your GitHub Pages site
+url: "https://aayu1245.github.io" # replace with your GitHub Pages URL
+
+# Exclude these from the build to avoid errors
+exclude:
+  - node_modules
+  - vendor
+  - README.md
+  - package.json
+  - package-lock.json
+  - yarn.lock
+  - .gitignore
+
+markdown: kramdown
+theme: jekyll-theme-primer
+plugins:
+  - jekyll-seo-tag
