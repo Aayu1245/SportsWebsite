@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kabaddi Match Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="../CSS-FILES/KABADDI-SCORE.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1><i class="fas fa-running"></i> Kabaddi Match Admin</h1>
+
+        <div class="game-controls">
+            <button class="control-btn" id="start-game">
+                <i class="fas fa-play"></i> Start Match
+            </button>
+            <button class="control-btn" id="end-half" disabled>
+                <i class="fas fa-flag-checkered"></i> End Half
+            </button>
+            <button class="control-btn" id="timeout" disabled>
+                <i class="fas fa-clock"></i> Timeout
+            </button>
+            <button class="control-btn" id="all-out" disabled>
+                <i class="fas fa-users-slash"></i> All Out
+            </button>
+        </div>
+
+        <div class="timer-container">
+            <div class="timer-label">Match Timer</div>
+            <div class="timer">
+                <div class="timer-segment" id="game-timer">00:00</div>
+            </div>
+            <div class="half-controls">
+                <button class="control-btn" id="start-timer" disabled>
+                    <i class="fas fa-play"></i> Start Timer
+                </button>
+                <button class="control-btn" id="pause-timer" disabled>
+                    <i class="fas fa-pause"></i> Pause Timer
+                </button>
+                <button class="control-btn" id="reset-timer" disabled>
+                    <i class="fas fa-redo"></i> Reset Timer
+                </button>
+            </div>
+        </div>
+
+        <div class="match-info">
+            <div class="info-item">
+                <i class="fas fa-stopwatch"></i>
+                <span>Half Duration: <strong>20 minutes</strong></span>
+            </div>
+            <div class="info-item">
+                <i class="fas fa-flag"></i>
+                <span>Current Half: <strong id="current-half">1</strong></span>
+            </div>
+            <div class="info-item">
+                <i class="fas fa-clock"></i>
+                <span>Timeouts Left: <strong id="timeouts-left">5</strong></span>
+            </div>
+        </div>
+
+        <div class="scoreboard">
+            <div class="team-score team1" id="team1-score">
+                <h2>Team A</h2>
+                <div class="score">0</div>
+            </div>
+            <div class="vs">VS</div>
+            <div class="team-score team2" id="team2-score">
+                <h2>Team B</h2>
+                <div class="score">0</div>
+            </div>
+        </div>
+
+        <div class="teams-tables">
+            <div class="team-table team1">
+                <h2><i class="fas fa-users"></i> Team A Players</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>Name</th>
+                            <th>Position</th>
+                            <th>Stats</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="team1-players">
+                        <!-- Players will be added here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="team-table team2">
+                <h2><i class="fas fa-users"></i> Team B Players</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>Name</th>
+                            <th>Position</th>
+                            <th>Stats</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="team2-players">
+                        <!-- Players will be added here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="match-events">
+            <h3><i class="fas fa-list-alt"></i> Match Events Log</h3>
+            <div class="events-log" id="events-log">
+                <!-- Events will be added here -->
+            </div>
+        </div>
+
+        <div class="modal" id="action-modal">
+            <div class="modal-content">
+                <span class="close-btn">&times;</span>
+                <h3 id="player-name"><i class="fas fa-user"></i> Player Name</h3>
+                <div class="action-buttons">
+                    <button class="action-btn raid" data-action="raid">
+                        <i class="fas fa-running"></i> Raid
+                    </button>
+                    <button class="action-btn touch" data-action="touch">
+                        <i class="fas fa-hand-paper"></i> Touch
+                    </button>
+                    <button class="action-btn tackle" data-action="tackle">
+                        <i class="fas fa-people-arrows"></i> Tackle
+                    </button>
+                    <button class="action-btn bonus" data-action="bonus">
+                        <i class="fas fa-star"></i> Bonus
+                    </button>
+                    <button class="action-btn point" data-action="point">
+                        <i class="fas fa-plus"></i> Add Point
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="modal" id="return-modal">
+            <div class="modal-content">
+                <h3><i class="fas fa-question-circle"></i> Raid Outcome</h3>
+                <p>Did the raider return successfully?</p>
+                <div class="action-buttons">
+                    <button class="action-btn success" id="return-success">
+                        <i class="fas fa-check"></i> Yes, Returned
+                    </button>
+                    <button class="action-btn danger" id="return-failed">
+                        <i class="fas fa-times"></i> No, Tackled
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../JAVA_SCRIPT-FILES/KABADDI-SCORE.js">
+    </script>
+</body>
+
+</html>

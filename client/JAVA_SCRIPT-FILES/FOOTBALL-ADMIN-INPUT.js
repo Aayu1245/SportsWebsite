@@ -1,43 +1,55 @@
+
 document.addEventListener('DOMContentLoaded', function() {
-    // Sample data - in a real app, this would come from a database
-    const team1 = {
-        name: "Team A",
-        players: [
-            { number: 1, name: "Goalkeeper", actions: [] },
-            { number: 2, name: "Defender 1", actions: [] },
-            { number: 3, name: "Defender 2", actions: [] },
-            { number: 4, name: "Midfielder 1", actions: [] },
-            { number: 5, name: "Midfielder 2", actions: [] },
-            { number: 6, name: "Forward 1", actions: [] },
-            { number: 7, name: "Forward 2", actions: [] },
-            { number: 8, name: "Substitute 1", actions: [] },
-            { number: 9, name: "Substitute 2", actions: [] },
-            { number: 10, name: "Substitute 3", actions: [] },
-            { number: 11, name: "Substitute 4", actions: [] }
-        ],
-        score: 0
-    };
-    
-    const team2 = {
-        name: "Team B",
-        players: [
-            { number: 1, name: "Goalkeeper", actions: [] },
-            { number: 2, name: "Defender 1", actions: [] },
-            { number: 3, name: "Defender 2", actions: [] },
-            { number: 4, name: "Midfielder 1", actions: [] },
-            { number: 5, name: "Midfielder 2", actions: [] },
-            { number: 6, name: "Forward 1", actions: [] },
-            { number: 7, name: "Forward 2", actions: [] },
-            { number: 8, name: "Substitute 1", actions: [] },
-            { number: 9, name: "Substitute 2", actions: [] },
-            { number: 10, name: "Substitute 3", actions: [] },
-            { number: 11, name: "Substitute 4", actions: [] }
-        ],
-        score: 0
-    };
-    
-    // DOM elements
-    const team1Element = document.getElementById('team1-players');
+    let teams1 = 0;
+    let teams2 = 0;
+    let team1 = [];
+    let team2 = [];
+    const team1p = [];
+    async function matchtoload(){
+        const resp = await fetch('http://localhost:8000/cur-match-f');
+        teamsdata = await resp.json();
+        teams1 = teamsdata[0];
+        teams2 = teamsdata[1];
+        console.log(teams1.players);
+        console.log(teams1.players.length);
+        console.log(teams1.players[0]);
+        console.log(teams1.players[0].name);
+        
+        for(let i=0; i < teams1.players.length; i++){
+            team1p.push({number:i+1, name: teams1.players[i].name, actions: []});
+        }
+        console.log(team1p);
+        team1 = {
+            name: teams1.teamname,
+            players: team1p,
+            score: 0,
+        };
+        
+        team2 = {
+            name: teams2.teamname,
+            players: [
+                { number: 1, name: "Goalkeeper", actions: [] },
+                { number: 2, name: "Defender 1", actions: [] },
+                { number: 3, name: "Defender 2", actions: [] },
+                { number: 4, name: "Midfielder 1", actions: [] },
+                { number: 5, name: "Midfielder 2", actions: [] },
+                { number: 6, name: "Forward 1", actions: [] },
+                { number: 7, name: "Forward 2", actions: [] },
+                { number: 8, name: "Substitute 1", actions: [] },
+                { number: 9, name: "Substitute 2", actions: [] },
+                { number: 10, name: "Substitute 3", actions: [] },
+                { number: 11, name: "Substitute 4", actions: [] }
+            ],
+            score: 0
+        };
+
+        inf();
+    }
+
+    matchtoload()
+
+    function inf(){
+        const team1Element = document.getElementById('team1-players');
     const team2Element = document.getElementById('team2-players');
     const team1ScoreElement = document.querySelector('#team1-score .score');
     const team2ScoreElement = document.querySelector('#team2-score .score');
@@ -51,6 +63,25 @@ document.addEventListener('DOMContentLoaded', function() {
     let selectedPlayer = null;
     let selectedTeam = null;
     
+    // Game Controls Functionality
+const startGameBtn = document.getElementById('start-game');
+const endGameBtn = document.getElementById('end-game');
+const gameStatus = document.getElementById('game-status');
+
+startGameBtn.addEventListener('click', () => {
+    gameStatus.textContent = "Status: Live";
+    startGameBtn.disabled = true;
+    endGameBtn.disabled = false;
+    // Add any other logic you need when the game starts
+});
+
+endGameBtn.addEventListener('click', () => {
+    gameStatus.textContent = "Status: Ended";
+    endGameBtn.disabled = true;
+    startGameBtn.disabled = false;
+    // Add any other logic you need when the game ends
+});
+
     // Render players in tables
     function renderPlayers() {
         team1Element.innerHTML = '';
@@ -199,4 +230,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Add welcome message to events log
     addEventToLog('Match started!');
+    }
+    
+    
+    // DOM elements
+    
 });

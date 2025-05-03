@@ -56,7 +56,15 @@ body {
     background: #333;
     color: #fff;
     padding: 10px 20px;
+    position: sticky;
+    top: 0;
   }
+  
+  .player-field2{
+    display: flex;
+    flex-direction: row;
+  }
+
   
   header h1 {
     margin: 0;

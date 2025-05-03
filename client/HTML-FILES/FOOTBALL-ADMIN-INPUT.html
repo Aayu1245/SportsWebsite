@@ -10,7 +10,15 @@
 <body>
     <div class="container">
         <h1>Football Match Admin</h1>
-        
+        <div class="game-controls">
+            <button id="start-game" class="control-btn start-btn">
+                <i class="fas fa-play"></i> Start Game
+            </button>
+            <button id="end-game" class="control-btn end-btn" disabled>
+                <i class="fas fa-stop"></i> End Game
+            </button>
+            <div id="game-status" class="game-status">Status: Not Started</div>
+        </div>
         <div class="scoreboard">
             <div class="team-score" id="team1-score">
                 <h2>Team A</h2>
@@ -22,8 +30,6 @@
                 <div class="score">0</div>
             </div>
         </div>
-        
-        
         <div class="teams-tables">
             <div class="team-table team-a">
                 <h2>Team A Players</h2>

@@ -20,46 +20,6 @@ body {
     line-height: 1.6;
 }
 
-/* Game Controls Styling */
-.game-controls {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-bottom: 20px;
-    align-items: center;
-}
-
-.control-btn {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
-.start-btn {
-    background-color: #4CAF50;
-    color: white;
-}
-
-.end-btn {
-    background-color: #f44336;
-    color: white;
-}
-
-.control-btn:disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
-}
-
-.game-status {
-    font-weight: bold;
-    color: #333;
-}
-
 .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -77,7 +37,7 @@ h1 {
     justify-content: center;
     align-items: center;
     margin-bottom: 20px;
-    background: linear-gradient(to right, blue,red);
+    background: linear-gradient(to right, #1e3c72, #b91d1d);
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -89,21 +49,36 @@ h1 {
 }
 
 .team-score h2 {
-    color: var(--primary-color);
+    color: white;
     margin-bottom: 10px;
 }
 
 .score {
     font-size: 3rem;
     font-weight: bolder;
-    color: var(--dark-color);
+    color: white;
 }
 
 .vs {
     font-size: 2rem;
     font-weight: bold;
     margin: 0 20px;
-    color: var(--danger-color);
+    color: white;
+}
+
+.quarter-scores {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.quarter-score {
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
 }
 
 .match-events {
@@ -149,11 +124,12 @@ h1 {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.team-a{
-    background-color: lightblue;
+.team-a {
+    background-color: #e6f2ff;
 }
-.team-b{
-    background-color: lightcoral;
+
+.team-b {
+    background-color: #ffebee;
 }
 
 .team-table h2 {
@@ -169,7 +145,8 @@ table {
     border-collapse: collapse;
 }
 
-th, td {
+th,
+td {
     padding: 12px 15px;
     text-align: left;
     border-bottom: 1px solid #ddd;
@@ -184,13 +161,13 @@ tr:hover {
     background-color: #f9f9f9;
 }
 
-.player-actions {
+.player-stats {
     display: flex;
     gap: 5px;
     flex-wrap: wrap;
 }
 
-.action-badge {
+.stat-badge {
     padding: 3px 8px;
     border-radius: 12px;
     font-size: 0.8rem;
@@ -198,19 +175,31 @@ tr:hover {
     color: white;
 }
 
-.action-badge.goal {
+.stat-badge.points {
     background-color: var(--secondary-color);
 }
 
-.action-badge.foul {
+.stat-badge.foul {
     background-color: var(--warning-color);
 }
 
-.action-badge.yellow {
-    background-color: #f1c40f;
+.stat-badge.assist {
+    background-color: #9b59b6;
 }
 
-.action-badge.red {
+.stat-badge.rebound {
+    background-color: #3498db;
+}
+
+.stat-badge.steal {
+    background-color: #1abc9c;
+}
+
+.stat-badge.block {
+    background-color: #e67e22;
+}
+
+.stat-badge.turnover {
     background-color: var(--danger-color);
 }
 
@@ -226,6 +215,11 @@ tr:hover {
 
 .action-btn-table:hover {
     background-color: #2980b9;
+}
+
+.action-btn-table:disabled {
+    background-color: #95a5a6;
+    cursor: not-allowed;
 }
 
 .modal {
@@ -256,6 +250,7 @@ tr:hover {
         opacity: 0;
         transform: translateY(-50px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -300,7 +295,7 @@ tr:hover {
     transform: scale(1.05);
 }
 
-.action-btn.goal {
+.action-btn.points {
     background-color: var(--secondary-color);
 }
 
@@ -308,12 +303,58 @@ tr:hover {
     background-color: var(--warning-color);
 }
 
-.action-btn.yellow {
-    background-color: var(--warning-color);
+.action-btn.assist {
+    background-color: #9b59b6;
 }
 
-.action-btn.red {
+.action-btn.rebound {
+    background-color: #3498db;
+}
+
+.action-btn.steal {
+    background-color: #1abc9c;
+}
+
+.action-btn.block {
+    background-color: #e67e22;
+}
+
+.action-btn.turnover {
     background-color: var(--danger-color);
+}
+
+.game-controls {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.control-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--dark-color);
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.control-btn:disabled {
+    background-color: #95a5a6;
+    cursor: not-allowed;
+}
+
+.control-btn:hover:not(:disabled) {
+    opacity: 0.9;
+}
+
+.timer {
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    font-weight: bold;
+    color: var(--dark-color);
 }
 
 /* Responsive design */
@@ -321,21 +362,25 @@ tr:hover {
     .teams-tables {
         flex-direction: column;
     }
-    
+
     .scoreboard {
         flex-direction: column;
     }
-    
+
     .team-score {
         margin-bottom: 20px;
     }
-    
+
     .vs {
         margin: 10px 0;
     }
-    
+
     table {
         display: block;
         overflow-x: auto;
+    }
+
+    .action-buttons {
+        grid-template-columns: 1fr;
     }
 }

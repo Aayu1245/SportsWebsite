@@ -18,14 +18,15 @@ function createPlayerField1() {
   let html = `<input type="text" class="player-name" placeholder="Player Name" required />`;
 
   //add them on top of the below if statement
-  if (sport === "Cricket") {
+  if (sport === "Basketball") {
     html += `
                  <select class="player-role"  required>
                     <option value="">Select Role</option>
-                    <option value="Right Hand Batsman">Right Hand Batsman</option>
-                    <option value="Left Hand Batsman">Left Hand Batsman</option>
-                    <option value="Wicketkeeper">Wicketkeeper</option>
-                    <option value="Bowler">Bowler</option>
+                    <option value="Point Guard">Point Guard</option>
+                    <option value="Shooting Guard">Shooting Guard</option>
+                    <option value="Small Forward">Small Forward</option>
+                    <option value="Power Forward">Power Forward</option>
+                    <option value="Center">Center</option>
                  </select>`;
   } else if (sport === "Football") {
     html += `<select class="player-role"  required>
@@ -58,14 +59,15 @@ function createPlayerField2() {
   let html = `<input type="text" class="player-name" placeholder="Player Name" required  />`;
 
   //add them on top of the below if statement
-  if (sport === "Cricket") {
+  if (sport === "Basketball") {
     html += `
                  <select class="player-role"  required>
                     <option value="">Select Role</option>
-                    <option value="Right Hand Batsman">Right Hand Batsman</option>
-                    <option value="Left Hand Batsman">Left Hand Batsman</option>
-                    <option value="Wicketkeeper">Wicketkeeper</option>
-                    <option value="Bowler">Bowler</option>
+                    <option value="Point Guard">Point Guard</option>
+                    <option value="Shooting Guard">Shooting Guard</option>
+                    <option value="Small Forward">Small Forward</option>
+                    <option value="Power Forward">Power Forward</option>
+                    <option value="Center">Center</option>
                  </select>`;
   } else if (sport === "Football") {
     html += `<select class="player-role"  required>
@@ -129,57 +131,7 @@ document.getElementById("sport").addEventListener("change", function () {
     count2 = 1;
 });
 
-// Function to load and display matches from localStorage
-function loadMatches() {
-  const container = document.getElementById("matches-container");
-  const matches = JSON.parse(localStorage.getItem("matches")) || [];
-  container.innerHTML = "";
-  matches.forEach((match, index) => {
-    const div = document.createElement("div");
-    div.className = "match-card";
-    div.innerHTML = `
-          <h3>${match.sport} Match</h3>
-          <p><strong>Team 1:</strong> ${match.team1Name}</p>
-          <p><strong>Team 2:</strong> ${match.team2Name}</p>
-          <div class="players-info">
-            <h4>Team 1 Players</h4>
-            ${match.team1Players
-              .map((p) => {
-                if (match.sport === "Cricket") {
-                  return `<p>${p.name} | Role: ${p.role}</p>`; // Balls: ${p.balls} | Score: ${p.total} | neded inside it
-                } else if (match.sport === "Football") {
-                  return `<p>${p.name} | Role: ${p.role}</p>`;
-                } else if (match.sport === "Kabbadi") {
-                  return `<p>${p.name} | Role: ${p.role}</p>`;
-                } else {
-                  return `<p>${p.name} | Role: ${p.role}</p>`;
-                }
-              })
-              .join("")}
-            <h4>Team 2 Players</h4>
-            ${match.team2Players
-              .map((p) => {
-                if (match.sport === "Cricket") {
-                  return `<p>${p.name} | Role: ${p.role}</p>`; // Balls: ${p.balls} | Score: ${p.total} | neded inside it
-                } else if (match.sport === "Football") {
-                  return `<p>${p.name} | Role: ${p.role}</p>`;
-                } else if (match.sport === "Kabbadi") {
-                  return `<p>${p.name} | Role: ${p.role}</p>`;
-                } else {
-                  return `<p>${p.name} | Role: ${p.role}</p>`;
-                }
-              })
-              .join("")}
-          </div>
-          <button data-index="${index}" class="edit-match">Edit</button>
-          <button data-index="${index}" class="delete-match">Delete</button>
-        `;
-    container.appendChild(div);
-  });
-}
 
-// Load matches on page load
-loadMatches();
 
 
 
@@ -188,6 +140,7 @@ loadMatches();
 matchForm.addEventListener("click", async function (e) { 
   e.preventDefault();
   const sport = document.getElementById("sport").value;
+  
   const team1Name = document.getElementById("team1-name").value;
   const team2Name = document.getElementById("team2-name").value;
   console.log('check2',sport,team1Name,team2Name); 
@@ -213,7 +166,7 @@ matchForm.addEventListener("click", async function (e) {
   });
   // console.log(sport, team1Name, team2Name, )
   
-  async function senddata(sports,Teamname,Players){
+  async function sendteamdata(sports,Teamname,Players){
     // console.log('check ',sports,Teamname,Players)
     const dat = await fetch('http://localhost:8000/register-server-data', {
       method: 'POST',
@@ -228,14 +181,29 @@ matchForm.addEventListener("click", async function (e) {
     });
     // return dat; 
   }
-  
-  
-  
-  const response1 = await senddata(sport,team1Name,team1Players);
-  console.log(response1)
-  const response2 = await senddata(sport,team2Name,team2Players);
-  console.log(response2)
 
+  async function sendmatchdata(t1,t2,sport){
+    const dat = await fetch('http://localhost:8000/register-match-data', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        team1: t1,
+        team2: t2,
+        sport: sport,
+      })
+    })
+  }
+  
+  
+  
+  const response1 = await sendteamdata(sport,team1Name,team1Players);
+  console.log(response1)
+  const response2 = await sendteamdata(sport,team2Name,team2Players);
+  console.log(response2)
+  const response3 = await sendmatchdata(team1Name, team2Name, sport);
+  console.log(response3)
   const newMatch = {
     sport,
     team1Name,
@@ -258,8 +226,7 @@ matchForm.addEventListener("click", async function (e) {
   }
   localStorage.setItem("matches", JSON.stringify(matches));
 
-  // Reset the form and clear dynamically added players
-  matchForm.reset();
+  
   document
     .getElementById("team1-players")
     .querySelectorAll(".player-field")
@@ -269,7 +236,18 @@ matchForm.addEventListener("click", async function (e) {
     .querySelectorAll(".player-field")
     .forEach((field) => field.remove());
 
-  loadMatches();
+
+  console.log(sport);
+  if (sport === "Football"){
+    window.open('FOOTBALL-ADMIN-INPUT.html', '_blank');
+  };
+  if (sport === "Basketball"){
+    window.open('BASKETBALL-SCORE.html', '_blank');
+  };
+  if (sport === "Kabbadi"){
+    window.open('KABADDI-SCORE.html', '_blank');
+  };
+
 });
 
 // Event delegation for Edit and Delete buttons on match cards

@@ -1,0 +1,126 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kabaddi Matches</title>
+</head>
+<link rel="stylesheet" href="../CSS-FILES/KABADDI-FACE-STYLE.css">
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Pro Kabaddi Matches</h1>
+        </header>
+
+        <nav class="match-nav">
+            <button class="nav-button active">Live</button>
+            <button class="nav-button">Upcoming</button>
+            <button class="nav-button">Completed</button>
+        </nav>
+
+        <div class="matches-grid">
+            <!-- Live Match -->
+            <a href="kabaddi-scorecard.html" class="match-card">
+                <div class="match-status live">LIVE</div>
+                <div class="teams-container">
+                    <div class="team-row">
+                        <div class="team-info">
+                            <img src="https://via.placeholder.com/70" class="player-photo" alt="Raider">
+                            <span>Pawan Sehrawat</span>
+                            <div class="score-preview">12</div>
+                        </div>
+                        <div class="team-info">
+                            <img src="https://via.placeholder.com/70" class="player-photo" alt="Defender">
+                            <span>Fazel Atrachali</span>
+                            <div class="score-preview">8</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="match-details">
+                    <div>Raids: 23 | Tackles: 14</div>
+                    <div class="raid-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">3</div>
+                            <div class="stat-label">SUPER RAIDS</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">2</div>
+                            <div class="stat-label">SUPER TACKLES</div>
+                        </div>
+                    </div>
+                    <div>32' Second Half</div>
+                </div>
+            </a>
+
+            <!-- Upcoming Match -->
+            <a href="#" class="match-card">
+                <div class="match-status upcoming">UPCOMING</div>
+                <div class="teams-container">
+                    <div class="team-row">
+                        <div class="team-info">
+                            <img src="https://via.placeholder.com/70" class="player-photo" alt="Team A">
+                            <span>Bengal Warriors</span>
+                        </div>
+                        <div class="vs-text">VS</div>
+                        <div class="team-info">
+                            <img src="https://via.placeholder.com/70" class="player-photo" alt="Team B">
+                            <span>Patna Pirates</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="match-details">
+                    <div>Season 10 • Match 45</div>
+                    <div>Tomorrow 7:30 PM IST</div>
+                </div>
+            </a>
+
+            <!-- Completed Match -->
+            <a href="#" class="match-card">
+                <div class="match-status completed">COMPLETED</div>
+                <div class="teams-container">
+                    <div class="team-row">
+                        <div class="team-info">
+                            <img src="https://via.placeholder.com/70" class="player-photo" alt="Winner">
+                            <span>Dabang Delhi</span>
+                            <div class="score-preview">45</div>
+                        </div>
+                        <div class="team-info">
+                            <img src="https://via.placeholder.com/70" class="player-photo" alt="Runner-up">
+                            <span>Bengaluru Bulls</span>
+                            <div class="score-preview">38</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="match-details">
+                    <div>Final Score</div>
+                    <div class="raid-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">7</div>
+                            <div class="stat-label">ALL OUTS</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">82</div>
+                            <div class="stat-label">TOTAL POINTS</div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.nav-button').forEach(button => {
+            button.addEventListener('click', (e) => {
+                document.querySelectorAll('.nav-button').forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                const filter = e.target.textContent.toLowerCase();
+                document.querySelectorAll('.match-card').forEach(card => {
+                    card.style.display = card.querySelector('.match-status').classList.contains(filter) 
+                                    ? 'block' 
+                                    : 'none';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
