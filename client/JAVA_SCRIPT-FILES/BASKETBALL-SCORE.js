@@ -1,39 +1,47 @@
-document.addEventListener('DOMContentLoaded', function () {
-    // Sample data - in a real app, this would come from a database
-    const homeTeam = {
-        name: "Home Team",
-        players: [
-            { number: 4, name: "Point Guard", position: "PG", stats: [], fouls: 0 },
-            { number: 8, name: "Shooting Guard", position: "SG", stats: [], fouls: 0 },
-            { number: 10, name: "Small Forward", position: "SF", stats: [], fouls: 0 },
-            { number: 15, name: "Power Forward", position: "PF", stats: [], fouls: 0 },
-            { number: 23, name: "Center", position: "C", stats: [], fouls: 0 },
-            { number: 5, name: "Sixth Man", position: "G", stats: [], fouls: 0 },
-            { number: 7, name: "Forward", position: "F", stats: [], fouls: 0 },
-            { number: 11, name: "Big Man", position: "C", stats: [], fouls: 0 }
-        ],
-        score: 0,
-        quarterScores: [0, 0, 0, 0],
-        timeouts: 7
-    };
+document.addEventListener('DOMContentLoaded', function (e) {
+    e.preventDefault();
+    let teams1 = 0;
+    let teams2 = 0;
+    let homeTeam = 0;
+    let awayTeam = 0;
+    const team1p = [];
+    const team2p = [];
 
-    const awayTeam = {
-        name: "Away Team",
-        players: [
-            { number: 3, name: "Point Guard", position: "PG", stats: [], fouls: 0 },
-            { number: 6, name: "Shooting Guard", position: "SG", stats: [], fouls: 0 },
-            { number: 9, name: "Small Forward", position: "SF", stats: [], fouls: 0 },
-            { number: 12, name: "Power Forward", position: "PF", stats: [], fouls: 0 },
-            { number: 21, name: "Center", position: "C", stats: [], fouls: 0 },
-            { number: 1, name: "Sixth Man", position: "G", stats: [], fouls: 0 },
-            { number: 13, name: "Forward", position: "F", stats: [], fouls: 0 },
-            { number: 24, name: "Big Man", position: "C", stats: [], fouls: 0 }
-        ],
-        score: 0,
-        quarterScores: [0, 0, 0, 0],
-        timeouts: 7
-    };
+    async function matchtoload(){
+        const resp = await fetch('http://localhost:8000/cur-match-b');
+        const teamsdata = await resp.json();
+        teams1 = teamsdata[0];
+        teams2 = teamsdata[1];
+        console.log(teams1);
+        
+        for(let i=0; i < teams1.players.length; i++){
+            team1p.push({number:i+1, name: teams1.players[i].name, position: teams1.players[i].role, stats: [], fouls: 0});
+        }
+        for(let y=0; y < teams2.players.length; y++){
+            team2p.push({number:y+1, name: teams2.players[y].name, position: teams2.players[y].role, stats: [], fouls: 0});
+        }
+        homeTeam = {      
+            name: teams1.teamname,
+            players: team1p,
+            score: 0,
+            quarterScores: [0, 0, 0, 0],
+            timeouts: 7
+        };
+        awayTeam = {
+         
+            name: teams2.teamname,
+            players: team2p,
+            score: 0,
+            quarterScores: [0, 0, 0, 0],
+            timeouts: 7       
+        };
+        
+        infg(teamsdata[2]);
+    }
+    matchtoload()
 
+    function infg(x){
+        
     // Game state
     let gameState = {
         currentQuarter: 1,
@@ -75,6 +83,35 @@ document.addEventListener('DOMContentLoaded', function () {
     // Current selected player info
     let selectedPlayer = null;
     let selectedTeam = null;
+
+    async function sendScoreUpdate(team, player, points) {
+        const data = {
+            teamName: team.name,
+            playerName: player.name,
+            playerNumber: player.number,
+            points: points,
+            totalScore: team.score,
+            sportName: "Basketball",
+            matchid: x
+        };
+    
+        try {
+            const response = await fetch('http://localhost:8000/score-update', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+    
+            const result = await response.json();
+            console.log('Score update sent:', result);
+        } catch (error) {
+            console.error('Error updating score:', error);
+        }
+    }
+    
+
 
     // Render players in tables
     function renderPlayers() {
@@ -245,6 +282,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     time: gameState.timeRemaining,
                     timestamp: new Date().getTime()
                 });
+                sendScoreUpdate(selectedTeam, selectedPlayer, points);
                 addEventToLog(`${actionText} scored ${points} point${points > 1 ? 's' : ''}`);
                 break;
             case 'assist':
@@ -317,6 +355,31 @@ document.addEventListener('DOMContentLoaded', function () {
     // Start the game
     function startGame() {
         if (gameState.isGameStarted) return;
+        const dat = {
+            gameStatus: "Live", // e.g., "ongoing", "finished", "scheduled"
+            sportName: "Basketball",  // e.g., "football", "cricket", "tennis"
+            matchid: x,
+          };
+          
+          fetch('http://localhost:8000/status', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dat)
+          })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.json(); // or response.text() if server returns plain text
+          })
+          .then(result => {
+            console.log('Server response:', result);
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
 
         gameState.isGameStarted = true;
         gameState.timeRemaining = 720;
@@ -372,6 +435,31 @@ document.addEventListener('DOMContentLoaded', function () {
             addEventToLog(`Quarter ${gameState.currentQuarter} started!`);
         } else {
             addEventToLog('Game ended!');
+            const dat = {
+                gameStatus: "Completed", 
+                sportName: "Basketball",
+                matchid: x,  
+              };
+              
+              fetch('http://localhost:8000/status', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(dat)
+              })
+              .then(response => {
+                if (!response.ok) {
+                  throw new Error('Network response was not ok');
+                }
+                return response.json(); // or response.text() if server returns plain text
+              })
+              .then(result => {
+                console.log('Server response:', result);
+              })
+              .catch(error => {
+                console.error('Error:', error);
+              });
             gameState.isGameStarted = false;
             endQuarterBtn.disabled = true;
             timeoutBtn.disabled = true;
@@ -420,4 +508,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // Set team names
     document.querySelector('#team1-score h2').textContent = homeTeam.name;
     document.querySelector('#team2-score h2').textContent = awayTeam.name;
+    }
+
+    
+
 });

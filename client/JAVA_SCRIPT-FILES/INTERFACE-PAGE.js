@@ -7,3 +7,7 @@ document.getElementById("Football").addEventListener("click", function () {
 document.getElementById("kabbadi").addEventListener("click", function () {
     window.location.href = "KABADDI-FACE.html";
 });
+document.getElementById("Basketball").addEventListener("click", function () {
+    window.location.href = "BASKETBALL-FACE.html";
+});
+

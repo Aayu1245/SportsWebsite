@@ -21,7 +21,6 @@ const admin = new mongoose.Schema({
   },
 });
 
-
 const footballTeamSchema = new mongoose.Schema({
   teamname: String,
   formation: String, // e.g. "4-4-2", "4-3-3", etc.
@@ -82,50 +81,39 @@ const kabaddiTeamSchema = new mongoose.Schema({
 })
 
 const footballmatchschema = new mongoose.Schema({
-  team1: [{
+  team1: {
     name: String,
     score: Number,
-  }],
-  team2: [{
+  },
+  team2: {
     name: String,
     score: Number,
-  }],
+  },
   status: String,
 })
 const basketballmatchschema = new mongoose.Schema({
-  team1: [{
+  team1: {
     name: String,
     score: Number,
-  }],
-  team2: [{
+  },
+  team2: {
     name: String,
     score: Number,
-  }],
+  },
   status: String,
 })
 const kabaddimatchschema = new mongoose.Schema({
-  team1: [{
+  team1: {
     name: String,
     score: Number,
-  }],
-  team2: [{
+  },
+  team2: {
     name: String,
     score: Number,
-  }],
+  },
   status: String,
 })
-const curfm = new mongoose.Schema({
-  id1: String,
-  id2: String,
-})
-const curbm = new mongoose.Schema({
-  id1: String,
-  id2: String,
-})
-const curkm = new mongoose.Schema({
-  id1: String,
-  id2: String,
-})
+
 
 const FootballTeam = mongoose.model("FootballTeam", footballTeamSchema);
 const BasketBallTeam = mongoose.model("BasketBallTeam", basketballTeamSchema);
@@ -142,18 +130,17 @@ let curb1 = 0;
 let curb2 = 0;
 let curk1 = 0;
 let curk2 = 0;
+let curid = 0;
 
 
 app.get("/cur-match-f", async (req, res) => {
   try{
-    console.log(curf1);
     const t1 = await FootballTeam.findById(curf1);
-    console.log(t1);
     const t2 = await FootballTeam.findById(curf2);
-    console.log(t2);
     curf1 = 0;
     curf2 = 0;
-    res.json([t1,t2]);
+    res.json([t1,t2,curid]);
+    curid = 0;
   }
   catch(err){console.log(err)}
 });
@@ -161,9 +148,11 @@ app.get("/cur-match-b", async (req, res) => {
   try{
     const t1 = await BasketBallTeam.findById(curb1);
     const t2 = await BasketBallTeam.findById(curb2);
-    res.json({t1,t2});
     curb1 = 0;
     curb2 = 0;
+    res.json([t1,t2,curid]);
+    curid = 0;
+    
   }
   catch(err){console.log(err)}
 });
@@ -171,9 +160,10 @@ app.get("/cur-match-k", async (req, res) => {
   try{
     const t1 = await KabaddiTeam.findById(curk1);
     const t2 = await KabaddiTeam.findById(curk2);
-    res.json({t1,t2});
     curk1 = 0;
     curk2 = 0;
+    res.json([t1,t2,curid]);
+    curid = 0;
   }
   catch(err){console.log(err)}
 });
@@ -251,49 +241,145 @@ app.post("/register-match-data", async(req,res)=>{
   const body = req.body;
   try{
     if (body.sport === "Football"){
-      await FootballMatches.create({
-        team1 : [{
+      const dat = await FootballMatches.create({
+        team1 : {
           name: body.team1,
           score:0,
-        }],
-        team2 : [{
+        },
+        team2 : {
           name: body.team2,
           score:0,
-        }],
-        status: "upcoming",
+        },
+        status: "Upcoming",
       })
+      curid = dat._id;
     }
     if (body.sport === "Kabbadi"){
-      await KabaddiMatches.create({
-        team1 : [{
+      const dat = await KabaddiMatches.create({
+        team1 : {
           name: body.team1,
           score:0,
-        }],
-        team2 : [{
+        },
+        team2 : {
           name: body.team2,
           score:0,
-        }],
-        status: "upcoming",
+        },
+        status: "Upcoming",
       })
+      curid = dat._id;
     }
     if (body.sport === "Basketball"){
-      await BasketballMatches.create({
-        team1 : [{
+      const dat = await BasketballMatches.create({
+        team1 : {
           name: body.team1,
           score:0,
-        }],
-        team2 : [{
+        },
+        team2 : {
           name: body.team2,
           score:0,
-        }],
-        status: "upcoming",
+        },
+        status: "Upcoming",
       })
+      curid = dat._id;
     }
     return res.status(200).json({status:"Success"});
   }
   catch(err){
     res.status(502).json({status:"err"})
   };
+})
+app.post("/status", async (req,res)=>{
+  body = req.body;
+  
+  if (body.sportName === "Football"){
+    try{
+      await FootballMatches.findByIdAndUpdate(body.matchid, {status: body.gameStatus});
+    }
+    catch(err){console.log(err)};
+  }
+  if (body.sportName === "Kabaddi"){
+    try{
+      await KabaddiMatches.findByIdAndUpdate(body.matchid, {status: body.gameStatus});
+    }
+    catch(err){console.log(err)};
+  }
+  if (body.sportName === "Basketball"){
+    try{
+      await BasketballMatches.findByIdAndUpdate(body.matchid, {status: body.gameStatus});
+    }
+    catch(err){console.log(err)};
+  }
+
+  res.json(["yeah"])
+})
+app.post('/score-update', async(req,res)=>{
+  body = req.body;
+  console.log(body);
+  if (body.sportName === "Football"){
+    const dat = await FootballMatches.findById(body.matchid);
+    if (dat.team1.name === body.team){
+      await FootballMatches.findByIdAndUpdate(
+        body.matchid,
+        { $inc: { "team1.score": 1 } },
+        { new: true }
+      );
+    }
+    else{
+      await FootballMatches.findByIdAndUpdate(
+        body.matchid,
+        { $inc: { "team2.score": 1 } },
+        { new: true }
+      );
+    }
+  }
+  if (body.sportName === "Basketball"){
+    const dat = await BasketballMatches.findById(body.matchid);
+    if (dat.team1.name === body.teamName){
+      await BasketballMatches.findByIdAndUpdate(
+        body.matchid,
+        { $inc: { "team1.score": body.points } },
+        { new: true }
+      );
+    }
+    else{
+      await BasketballMatches.findByIdAndUpdate(
+        body.matchid,
+        { $inc: { "team2.score": body.points } },
+        { new: true }
+      );
+    }
+  }
+  if (body.sportName === "Kabaddi"){
+    const dat = await KabaddiMatches.findById(body.matchId);
+    console.log(dat);
+    if (dat.team1.name === body.teamName){
+      await KabaddiMatches.findByIdAndUpdate(
+        body.matchId,
+        { $inc: { "team1.score": body.pointsScored } },
+        { new: true }
+      );
+    }
+    else{
+      await KabaddiMatches.findByIdAndUpdate(
+        body.matchId,
+        { $inc: { "team2.score": body.pointsScored } },
+        { new: true }
+      );
+    }
+  }
+  res.json(["ok"]);
+});
+app.get('/loadcardsf', async(req,res)=>{
+  const matches = await FootballMatches.find();
+  res.json(matches);
+})
+app.get('/loadcardsb', async(req,res)=>{
+  const matches = await BasketballMatches.find();
+  res.json(matches);
+})
+app.get('/loadcardsk', async(req,res)=>{
+  const matches = await KabaddiMatches.find();
+  res.json(matches);
 })
 const port = 8000;
 app.listen(port, () => console.log("server started"));
