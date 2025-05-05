@@ -45,7 +45,7 @@ body {
     text-shadow: var(--neon-shadow);
 }
 
-#LOGIN-PAGE, #ADMIN-LOGIN-PAGE {
+#ABOUT-US-PAGE, #ADMIN-LOGIN-PAGE {
     color: var(--accent-green);
     text-decoration: none;
     border: 2px solid var(--accent-green);
@@ -53,8 +53,17 @@ body {
     padding: 0.5rem 1rem;
     transition: all 0.3s ease;
 }
+#KK{
+    color: var(--accent-green);
+    text-decoration: none;
+    border-left: 5rem;
+    padding: 0.5rem 1rem;
+    transition: all 0.3s ease;
+    font-size:30px;
+    font-weight:600;
+}
 
-#LOGIN-PAGE:hover, #ADMIN-LOGIN-PAGE:hover {
+#ABOUT-US-PAGE:hover,#KK, #ADMIN-LOGIN-PAGE:hover {
     background: var(--accent-green);
     color: var(--dark-bg);
 }

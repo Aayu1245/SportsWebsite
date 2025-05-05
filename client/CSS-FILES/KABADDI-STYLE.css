@@ -69,7 +69,13 @@ body {
 .live, .upcoming, .completed {
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    color: var(--text-light);
+    padding: 0.8rem 1.2rem;
+    border-radius: 8px;
+    border-width: 5px;
+    border-color: #00e676;
+    transition: all 0.3s ease;
+    justify-content:flex-start;
     gap: 1rem;
 }
 
