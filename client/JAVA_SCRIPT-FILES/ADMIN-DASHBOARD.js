@@ -17,7 +17,7 @@ function createPlayerField1() {
   const sport = document.getElementById("sport").value;
   let html = `<input type="text" class="player-name" placeholder="Player Name" required />`;
 
-  //add them on top of the below if statement
+
   if (sport === "Basketball") {
     html += `
                  <select class="player-role"  required>
@@ -44,7 +44,6 @@ function createPlayerField1() {
                     <option value="Defender">Defender</option>
                  </select>`;
   } else {
-    // Fallback if other sports are added later.
     html += `<input type="text" class="player-role" placeholder="Player Role" required />`;
   }
   html += `<button type="button" class="remove-player" >Remove</button>`;
@@ -58,7 +57,7 @@ function createPlayerField2() {
   sport = document.getElementById("sport").value;
   let html = `<input type="text" class="player-name" placeholder="Player Name" required  />`;
 
-  //add them on top of the below if statement
+
   if (sport === "Basketball") {
     html += `
                  <select class="player-role"  required>
@@ -85,7 +84,6 @@ function createPlayerField2() {
                     <option value="Defender">Defender</option>
                  </select>`;
   } else {
-    // Fallback if other sports are added later.
     html += `<input type="text" class="player-role" placeholder="Player Role" required />`;
   }
   html += `<button type="button" class="remove-player" ">Remove</button>`;
@@ -93,7 +91,7 @@ function createPlayerField2() {
   return div;
 }
 
-// Add dynamic player fields for Team 1 and Team 2
+
 document
   .getElementById("add-team1-player")
   .addEventListener("click", function () {
@@ -110,14 +108,14 @@ document
     count2++;
   });
 
-// Remove player field (using event delegation)
+
 document.addEventListener("click", function (e) {
   if (e.target && e.target.classList.contains("remove-player")) {
     e.target.parentElement.remove();
   }
 });
 
-// When sport selection changes, clear the existing dynamic player fields.
+
 document.getElementById("sport").addEventListener("change", function () {
   document
     .getElementById("team1-players")
@@ -136,7 +134,7 @@ document.getElementById("sport").addEventListener("change", function () {
 
 
 
-// Handle new match form submission (and updating if editing)
+
 matchForm.addEventListener("click", async function (e) { 
   e.preventDefault();
   const sport = document.getElementById("sport").value;
@@ -144,7 +142,7 @@ matchForm.addEventListener("click", async function (e) {
   const team1Name = document.getElementById("team1-name").value;
   const team2Name = document.getElementById("team2-name").value;
   console.log('check2',sport,team1Name,team2Name); 
-  // Gather Team 1 player information
+
   const team1Players = Array.from(
     document.querySelectorAll("#team1-players .player-field")
   ).map((field) => {
@@ -153,7 +151,7 @@ matchForm.addEventListener("click", async function (e) {
     player.role = field.querySelector(".player-role").value;
     return player;
   });
-  // Gather Team 2 player information
+
   console.log('starting 2');
   const team2Players = Array.from(
     document.querySelectorAll("#team2-players .player-field2")
@@ -164,10 +162,9 @@ matchForm.addEventListener("click", async function (e) {
     player.role = field.querySelector(".player-role").value;
     return player;
   });
-  // console.log(sport, team1Name, team2Name, )
+ 
   
   async function sendteamdata(sports,Teamname,Players){
-    // console.log('check ',sports,Teamname,Players)
     const dat = await fetch('http://localhost:8000/register-server-data', {
       method: 'POST',
       headers: {
@@ -179,7 +176,6 @@ matchForm.addEventListener("click", async function (e) {
         players: Players,
       })
     });
-    // return dat; 
   }
 
   async function sendmatchdata(t1,t2,sport){
@@ -214,13 +210,10 @@ matchForm.addEventListener("click", async function (e) {
 
   let matches = JSON.parse(localStorage.getItem("matches")) || [];
   if (editingIndex === -1) {
-    // New match addition
     matches.push(newMatch);
   } else {
-    // Update the existing match
     matches[editingIndex] = newMatch;
     editingIndex = -1;
-    // Reset the submit button label back to default
     matchForm.querySelector("button[type=submit]").textContent =
       "Add Match Data";
   }
@@ -250,19 +243,16 @@ matchForm.addEventListener("click", async function (e) {
 
 });
 
-// Event delegation for Edit and Delete buttons on match cards
 document
   .getElementById("matches-container")
   .addEventListener("click", function (e) {
     const index = e.target.getAttribute("data-index");
     let matches = JSON.parse(localStorage.getItem("matches")) || [];
-    // Delete functionality
     if (e.target.classList.contains("delete-match")) {
       matches.splice(index, 1);
       localStorage.setItem("matches", JSON.stringify(matches));
       loadMatches();
     }
-    // Edit functionality
     else if (e.target.classList.contains("edit-match")) {
       const match = matches[index];
       editingIndex = index;
@@ -270,7 +260,6 @@ document
       document.getElementById("team1-name").value = match.team1Name;
       document.getElementById("team2-name").value = match.team2Name;
 
-      // Clear existing player rows so we can repopulate them.
       const team1Container = document.getElementById("team1-players");
       const team2Container = document.getElementById("team2-players");
       team1Container
@@ -280,7 +269,6 @@ document
         .querySelectorAll(".player-field")
         .forEach((el) => el.remove());
 
-      // For Team 1 players, re-create the player fields and populate values.
       match.team1Players.forEach((p) => {
         const field = createPlayerField();
         field.querySelector(".player-name").value = p.name;
@@ -289,7 +277,6 @@ document
         team1Container.appendChild(field);
       });
 
-      // For Team 2 players:
       match.team2Players.forEach((p) => {
         const field = createPlayerField();
         field.querySelector(".player-name").value = p.name;
@@ -298,13 +285,11 @@ document
         team2Container.appendChild(field);
       });
 
-      // Change the submit button text to indicate edit mode.
       matchForm.querySelector("button[type=submit]").textContent =
         "Update Match Data";
     }
   });
 
-// --- LOGOUT FUNCTIONALITY ---
 if (logoutButton) {
   logoutButton.addEventListener("click", function () {
     sessionStorage.removeItem("loggedIn");

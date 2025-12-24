@@ -42,17 +42,15 @@ document.addEventListener('DOMContentLoaded', function (e) {
 
     function infg(x){
         
-    // Game state
     let gameState = {
         currentQuarter: 1,
         isGameStarted: false,
-        timeRemaining: 720, // 12 minutes in seconds
+        timeRemaining: 720, 
         timerInterval: null,
         lastUpdateTime: null,
         gameStartTime: null
     };
 
-    // DOM elements
     const homeTeamElement = document.getElementById('team1-players');
     const awayTeamElement = document.getElementById('team2-players');
     const homeScoreElement = document.querySelector('#team1-score .score');
@@ -80,7 +78,6 @@ document.addEventListener('DOMContentLoaded', function (e) {
     const timeoutBtn = document.getElementById('timeout');
     const playerActionButtons = document.querySelectorAll('.action-btn-table');
 
-    // Current selected player info
     let selectedPlayer = null;
     let selectedTeam = null;
 
@@ -113,7 +110,6 @@ document.addEventListener('DOMContentLoaded', function (e) {
     
 
 
-    // Render players in tables
     function renderPlayers() {
         homeTeamElement.innerHTML = '';
         awayTeamElement.innerHTML = '';
@@ -128,34 +124,27 @@ document.addEventListener('DOMContentLoaded', function (e) {
             awayTeamElement.appendChild(playerRow);
         });
 
-        // Update player action buttons state based on game status
         updatePlayerActionButtons();
     }
 
-    // Create player table row
     function createPlayerRow(player, team) {
         const row = document.createElement('tr');
 
-        // Player number
         const numberCell = document.createElement('td');
         numberCell.textContent = player.number;
         row.appendChild(numberCell);
 
-        // Player name
         const nameCell = document.createElement('td');
         nameCell.textContent = player.name;
         row.appendChild(nameCell);
 
-        // Player position
         const positionCell = document.createElement('td');
         positionCell.textContent = player.position;
         row.appendChild(positionCell);
 
-        // Player stats
         const statsCell = document.createElement('td');
         statsCell.className = 'player-stats';
 
-        // Calculate points
         const points = player.stats.reduce((total, stat) => {
             if (stat.type === 'points') return total + stat.value;
             return total;
@@ -168,7 +157,6 @@ document.addEventListener('DOMContentLoaded', function (e) {
             statsCell.appendChild(badge);
         }
 
-        // Other stats
         const statsCount = {};
         player.stats.forEach(stat => {
             if (stat.type !== 'points') {
@@ -194,7 +182,6 @@ document.addEventListener('DOMContentLoaded', function (e) {
 
         row.appendChild(statsCell);
 
-        // Action button
         const buttonCell = document.createElement('td');
         const button = document.createElement('button');
         button.className = 'action-btn-table';
@@ -207,7 +194,6 @@ document.addEventListener('DOMContentLoaded', function (e) {
         return row;
     }
 
-    // Update all player action buttons state
     function updatePlayerActionButtons() {
         const buttons = document.querySelectorAll('.action-btn-table');
         buttons.forEach(button => {
@@ -215,7 +201,6 @@ document.addEventListener('DOMContentLoaded', function (e) {
         });
     }
 
-    // Open modal with player info
     function openModal(player, team) {
         if (!gameState.isGameStarted) return;
 
@@ -225,14 +210,12 @@ document.addEventListener('DOMContentLoaded', function (e) {
         modal.style.display = 'flex';
     }
 
-    // Close modal
     function closeModal() {
         modal.style.display = 'none';
         selectedPlayer = null;
         selectedTeam = null;
     }
 
-    // Add event to log
     function addEventToLog(eventText) {
         const now = new Date();
         const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
@@ -246,18 +229,15 @@ document.addEventListener('DOMContentLoaded', function (e) {
         }
         eventsLog.appendChild(eventItem);
 
-        // Scroll to bottom
         eventsLog.scrollTop = eventsLog.scrollHeight;
     }
 
-    // Format time (seconds to MM:SS)
     function formatTime(seconds) {
         const mins = Math.floor(seconds / 60);
-        const secs = (seconds % 60).toFixed(0); // Round seconds to 2 decimal places
+        const secs = (seconds % 60).toFixed(0); 
         return { mins, secs };
     }
 
-    // Update game timer display
     function updateTimerDisplay() {
         if (gameState.isGameStarted) {
             const { mins, secs } = formatTime(gameState.timeRemaining);
@@ -266,7 +246,6 @@ document.addEventListener('DOMContentLoaded', function (e) {
             gameTimerElement.textContent = 'Game not started';
         }
     }
-    // Handle action button clicks
     function handleAction(action, points = 0) {
         if (!selectedPlayer || !selectedTeam || !gameState.isGameStarted) return;
 
@@ -341,7 +320,6 @@ document.addEventListener('DOMContentLoaded', function (e) {
         closeModal();
     }
 
-    // Update scoreboard
     function updateScores() {
         homeScoreElement.textContent = homeTeam.score;
         awayScoreElement.textContent = awayTeam.score;
@@ -352,12 +330,11 @@ document.addEventListener('DOMContentLoaded', function (e) {
         }
     }
 
-    // Start the game
     function startGame() {
         if (gameState.isGameStarted) return;
         const dat = {
-            gameStatus: "Live", // e.g., "ongoing", "finished", "scheduled"
-            sportName: "Basketball",  // e.g., "football", "cricket", "tennis"
+            gameStatus: "Live",
+            sportName: "Basketball", 
             matchid: x,
           };
           
@@ -372,7 +349,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
             if (!response.ok) {
               throw new Error('Network response was not ok');
             }
-            return response.json(); // or response.text() if server returns plain text
+            return response.json(); 
           })
           .then(result => {
             console.log('Server response:', result);
@@ -392,17 +369,14 @@ document.addEventListener('DOMContentLoaded', function (e) {
         endQuarterBtn.disabled = false;
         timeoutBtn.disabled = false;
 
-        // Enable player action buttons
         updatePlayerActionButtons();
 
-        // Start timer
         gameState.timerInterval = setInterval(updateGameTimer, 1000);
 
         addEventToLog('Game started! Tip-off!');
         updateTimerDisplay();
     }
 
-    // Update game timer with real-time countdown
     function updateGameTimer() {
         const now = Date.now();
         const deltaTime = (now - gameState.lastUpdateTime) / 1000; // in seconds
@@ -417,7 +391,6 @@ document.addEventListener('DOMContentLoaded', function (e) {
         }
     }
 
-    // End current quarter and start next one
     function endQuarter() {
         if (!gameState.isGameStarted) return;
 
@@ -429,7 +402,6 @@ document.addEventListener('DOMContentLoaded', function (e) {
             gameState.lastUpdateTime = Date.now();
             updateTimerDisplay();
 
-            // Start timer for new quarter
             gameState.timerInterval = setInterval(updateGameTimer, 1000);
 
             addEventToLog(`Quarter ${gameState.currentQuarter} started!`);
@@ -452,7 +424,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
                 if (!response.ok) {
                   throw new Error('Network response was not ok');
                 }
-                return response.json(); // or response.text() if server returns plain text
+                return response.json(); 
               })
               .then(result => {
                 console.log('Server response:', result);
@@ -467,7 +439,6 @@ document.addEventListener('DOMContentLoaded', function (e) {
         }
     }
 
-    // Call timeout
     function callTimeout() {
         if (!gameState.isGameStarted) return;
 
@@ -480,7 +451,6 @@ document.addEventListener('DOMContentLoaded', function (e) {
         }
     }
 
-    // Event listeners
     closeBtn.addEventListener('click', closeModal);
     window.addEventListener('click', (e) => {
         if (e.target === modal) {
@@ -500,12 +470,10 @@ document.addEventListener('DOMContentLoaded', function (e) {
     endQuarterBtn.addEventListener('click', endQuarter);
     timeoutBtn.addEventListener('click', callTimeout);
 
-    // Initialize the app
     renderPlayers();
     updateScores();
     updateTimerDisplay();
 
-    // Set team names
     document.querySelector('#team1-score h2').textContent = homeTeam.name;
     document.querySelector('#team2-score h2').textContent = awayTeam.name;
     }

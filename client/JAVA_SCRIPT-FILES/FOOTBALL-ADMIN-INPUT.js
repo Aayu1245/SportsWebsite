@@ -48,11 +48,9 @@ document.addEventListener("DOMContentLoaded", function (e) {
     const actionButtons = document.querySelectorAll(".action-btn");
     const eventsLog = document.getElementById("events-log");
 
-    // Current selected player info
     let selectedPlayer = null;
     let selectedTeam = null;
 
-    // Game Controls Functionality
     const startGameBtn = document.getElementById("start-game");
     const endGameBtn = document.getElementById("end-game");
     const gameStatus = document.getElementById("game-status");
@@ -88,8 +86,8 @@ document.addEventListener("DOMContentLoaded", function (e) {
     startGameBtn.addEventListener("click", () => {
       gameStatus.textContent = "Status: Live";
       const dat = {
-        gameStatus: "Live", // e.g., "ongoing", "finished", "scheduled"
-        sportName: "Football",  // e.g., "football", "cricket", "tennis"
+        gameStatus: "Live", 
+        sportName: "Football", 
         matchid: x,
       };
       
@@ -104,7 +102,7 @@ document.addEventListener("DOMContentLoaded", function (e) {
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
-        return response.json(); // or response.text() if server returns plain text
+        return response.json(); 
       })
       .then(result => {
         console.log('Server response:', result);
@@ -114,7 +112,7 @@ document.addEventListener("DOMContentLoaded", function (e) {
       });
       startGameBtn.disabled = true;
       endGameBtn.disabled = false;
-      // Add any other logic you need when the game starts
+      
     });
 
     endGameBtn.addEventListener("click", () => {
@@ -136,7 +134,7 @@ document.addEventListener("DOMContentLoaded", function (e) {
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
-        return response.json(); // or response.text() if server returns plain text
+        return response.json(); 
       })
       .then(result => {
         console.log('Server response:', result);
@@ -146,10 +144,10 @@ document.addEventListener("DOMContentLoaded", function (e) {
       });
       endGameBtn.disabled = true;
       startGameBtn.disabled = false;
-      // Add any other logic you need when the game ends
+      
     });
 
-    // Render players in tables
+    
     function renderPlayers() {
       team1Element.innerHTML = "";
       team2Element.innerHTML = "";
@@ -165,21 +163,18 @@ document.addEventListener("DOMContentLoaded", function (e) {
       });
     }
 
-    // Create player table row
+    
     function createPlayerRow(player, team) {
       const row = document.createElement("tr");
 
-      // Player number
       const numberCell = document.createElement("td");
       numberCell.textContent = player.number;
       row.appendChild(numberCell);
 
-      // Player name
       const nameCell = document.createElement("td");
       nameCell.textContent = player.name;
       row.appendChild(nameCell);
 
-      // Player actions
       const actionsCell = document.createElement("td");
       actionsCell.className = "player-actions";
 
@@ -195,7 +190,6 @@ document.addEventListener("DOMContentLoaded", function (e) {
 
       row.appendChild(actionsCell);
 
-      // Action button
       const buttonCell = document.createElement("td");
       const button = document.createElement("button");
       button.className = "action-btn-table";
@@ -207,7 +201,6 @@ document.addEventListener("DOMContentLoaded", function (e) {
       return row;
     }
 
-    // Open modal with player info
     function openModal(player, team) {
       selectedPlayer = player;
       selectedTeam = team;
@@ -215,14 +208,12 @@ document.addEventListener("DOMContentLoaded", function (e) {
       modal.style.display = "flex";
     }
 
-    // Close modal
     function closeModal() {
       modal.style.display = "none";
       selectedPlayer = null;
       selectedTeam = null;
     }
 
-    // Add event to log
     function addEventToLog(eventText) {
       const now = new Date();
       const timeString = now.toLocaleTimeString([], {
@@ -235,11 +226,9 @@ document.addEventListener("DOMContentLoaded", function (e) {
       eventItem.textContent = `[${timeString}] ${eventText}`;
       eventsLog.appendChild(eventItem);
 
-      // Scroll to bottom
       eventsLog.scrollTop = eventsLog.scrollHeight;
     }
 
-    // Handle action button clicks
     function handleAction(action) {
       if (!selectedPlayer || !selectedTeam) return;
 
@@ -271,13 +260,11 @@ document.addEventListener("DOMContentLoaded", function (e) {
       closeModal();
     }
 
-    // Update scoreboard
     function updateScores() {
       team1ScoreElement.textContent = team1.score;
       team2ScoreElement.textContent = team2.score;
     }
 
-    // Event listeners
     closeBtn.addEventListener("click", closeModal);
     window.addEventListener("click", (e) => {
       if (e.target === modal) {
@@ -292,17 +279,13 @@ document.addEventListener("DOMContentLoaded", function (e) {
       });
     });
 
-    // Initialize the app
     renderPlayers();
     updateScores();
 
-    // Set team names
     document.querySelector("#team1-score h2").textContent = team1.name;
     document.querySelector("#team2-score h2").textContent = team2.name;
 
-    // Add welcome message to events log
     addEventToLog("Match started!");
   }
 
-  // DOM elements
 });

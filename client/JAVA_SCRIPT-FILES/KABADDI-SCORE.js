@@ -42,20 +42,19 @@ document.addEventListener('DOMContentLoaded', function (e) {
             currentHalf: 1,
             isMatchStarted: false,
             isTimerRunning: false,
-            timeRemaining: 1200, // 20 minutes in seconds
+            timeRemaining: 1200,
             timerInterval: null,
             lastUpdateTime: null,
             matchStartTime: null,
-            currentRaider: null,      // { player, team }
-            raidInProgress: false,    // whether a raid is currently happening
+            currentRaider: null,     
+            raidInProgress: false,   
             raidOutcome: null,
-            raidActions: [], // Track actions during current raid
-            currentRaidTeam: 'team1', // alternates between team1 and team2
-            raidStartTime: null,       // when the raid started
-            raidTimeout: 30, // seconds
+            raidActions: [],
+            currentRaidTeam: 'team1',
+            raidStartTime: null,      
+            raidTimeout: 30, 
             raidTimeoutId: null,
         };
-        // DOM elements
         const team1Element = document.getElementById('team1-players');
         const team2Element = document.getElementById('team2-players');
         const team1ScoreElement = document.querySelector('#team1-score .score');
@@ -78,25 +77,21 @@ document.addEventListener('DOMContentLoaded', function (e) {
         const currentHalfElement = document.getElementById('current-half');
         const timeoutsLeftElement = document.getElementById('timeouts-left');
     
-        // Current selected player info
         let selectedPlayer = null;
         let selectedTeam = null;
         
 
         function sendScoreToServer(team, pointsScored) {
-            // Assuming the match ID is stored in a variable `matchId`
             const matchId = x;  
         
-            // Prepare the data to send
             const data = {
                 matchId: matchId,
                 teamName: team.name,
                 pointsScored: pointsScored,
-                gameStatus: gameState.isMatchStarted ? "Live" : "Completed", // Match status
+                gameStatus: gameState.isMatchStarted ? "Live" : "Completed",
                 sportName: "Kabaddi", 
             };
         
-            // Send the POST request to the server
             fetch('http://localhost:8000/score-update', {
                 method: 'POST',
                 headers: {
@@ -108,18 +103,17 @@ document.addEventListener('DOMContentLoaded', function (e) {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
-                return response.json();  // Server response (optional, you can log or process it)
+                return response.json();  
             })
             .then(result => {
-                console.log('Score sent successfully:', result);  // Log the server response if necessary
+                console.log('Score sent successfully:', result); 
             })
             .catch(error => {
-                console.error('Error sending score:', error);  // Handle any errors
+                console.error('Error sending score:', error);  
             });
         }
 
 
-        // Render players in tables
         function renderPlayers() {
             team1Element.innerHTML = '';
             team2Element.innerHTML = '';
@@ -134,40 +128,32 @@ document.addEventListener('DOMContentLoaded', function (e) {
                 team2Element.appendChild(playerRow);
             });
     
-            // Update player action buttons state based on game status
             updatePlayerActionButtons();
         }
     
-        // Create player table row
         function createPlayerRow(player, team) {
             const row = document.createElement('tr');
     
-            // Player number
             const numberCell = document.createElement('td');
             numberCell.textContent = player.number;
             row.appendChild(numberCell);
     
-            // Player name
             const nameCell = document.createElement('td');
             nameCell.textContent = player.name;
             row.appendChild(nameCell);
     
-            // Player position
             const positionCell = document.createElement('td');
             positionCell.textContent = player.position;
             row.appendChild(positionCell);
     
-            // Player stats
             const statsCell = document.createElement('td');
             statsCell.className = 'player-stats';
     
-            // Calculate stats
             const statsCount = {};
             player.stats.forEach(stat => {
                 statsCount[stat.type] = (statsCount[stat.type] || 0) + 1;
             });
     
-            // Create badges for each stat type
             for (const statType in statsCount) {
                 const badge = document.createElement('span');
                 badge.className = `stat-badge ${statType}`;
@@ -204,7 +190,6 @@ document.addEventListener('DOMContentLoaded', function (e) {
     
             row.appendChild(statsCell);
     
-            // Action button
             const buttonCell = document.createElement('td');
             const button = document.createElement('button');
             button.className = 'action-btn-table';
@@ -217,7 +202,6 @@ document.addEventListener('DOMContentLoaded', function (e) {
             return row;
         }
     
-        // Update all player action buttons state
         function updatePlayerActionButtons() {
             const buttons = document.querySelectorAll('.action-btn-table');
             buttons.forEach(button => {
@@ -225,7 +209,6 @@ document.addEventListener('DOMContentLoaded', function (e) {
             });
         }
     
-        // Open modal with player info
         function openModal(player, team) {
             if (!gameState.isMatchStarted) return;
     
@@ -235,14 +218,12 @@ document.addEventListener('DOMContentLoaded', function (e) {
             modal.style.display = 'flex';
         }
     
-        // Close modal
         function closeModal() {
             modal.style.display = 'none';
             selectedPlayer = null;
             selectedTeam = null;
         }
     
-        // Add event to log
         function addEventToLog(eventText) {
             const now = new Date();
             const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
@@ -262,7 +243,6 @@ document.addEventListener('DOMContentLoaded', function (e) {
             else if (eventText.includes('ended')) icon = '<i class="fas fa-flag-checkered"></i>';
     
             if (gameState.isMatchStarted) {
-                // Change this line to show current time instead of remaining time
                 eventItem.innerHTML = `${icon} [H${gameState.currentHalf} ${timeString}] ${eventText}`;
             } else {
                 eventItem.innerHTML = `${icon} [Match not started] ${eventText}`;
@@ -271,10 +251,9 @@ document.addEventListener('DOMContentLoaded', function (e) {
             eventsLog.scrollTop = eventsLog.scrollHeight;
         }
     
-        // Format time (seconds to MM:SS)
         function formatTime(seconds) {
             const mins = Math.floor(seconds / 60);
-            const secs = (seconds % 60).toFixed(0); // Round seconds to 2 decimal places
+            const secs = (seconds % 60).toFixed(0);
             return {mins, secs};
         }
     
@@ -283,12 +262,10 @@ document.addEventListener('DOMContentLoaded', function (e) {
             return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
         }
     
-        // Update game timer display
         function updateTimerDisplay() {
             gameTimerElement.textContent = formatTimeForDisplay(gameState.timeRemaining);
         }
     
-        // Handle action button clicks
         function handleActionForPlayer(action, player, team) {
             selectedPlayer = player;
             selectedTeam = team;
@@ -314,7 +291,6 @@ document.addEventListener('DOMContentLoaded', function (e) {
                         return;
                     }
     
-                    // Clear any previous raid state
                     gameState.raidActions = [];
                     gameState.raidPoints = 0;
     
@@ -334,7 +310,6 @@ document.addEventListener('DOMContentLoaded', function (e) {
                     addEventToLog(`${actionText} started a raid`);
                     disableAllActionsExceptRaidActions(selectedPlayer, selectedTeam);
     
-                    // Set raid timeout
                     if (gameState.raidTimeoutId) {
                         clearTimeout(gameState.raidTimeoutId);
                     }
@@ -355,7 +330,6 @@ document.addEventListener('DOMContentLoaded', function (e) {
                         return;
                     }
     
-                    // Only allow one tackle per raid
                     if (gameState.raidActions.some(a => a.type === 'tackle')) {
                         alert('A tackle has already been attempted this raid!');
                         return;
@@ -379,7 +353,6 @@ document.addEventListener('DOMContentLoaded', function (e) {
                         timestamp: new Date().getTime(),
                         time: gameState.timeRemaining
                     });
-                    // Only track touches, don't add points yet
                     addEventToLog(`${actionText} made a touch`);
                     break;
     
@@ -393,7 +366,6 @@ document.addEventListener('DOMContentLoaded', function (e) {
                         timestamp: new Date().getTime(),
                         time: gameState.timeRemaining
                     });
-                    // Only track bonus, don't add points yet
                     addEventToLog(`${actionText} earned a bonus`);
                     break;
     
@@ -402,7 +374,6 @@ document.addEventListener('DOMContentLoaded', function (e) {
                         alert('Not in a raid or not your raid turn!');
                         return;
                     }
-                    // End the raid - points will be calculated in handleRaidEnd
                     addEventToLog(`${actionText} ended the raid`);
                     handleRaidEnd(true);
                     break;
@@ -418,7 +389,6 @@ document.addEventListener('DOMContentLoaded', function (e) {
                 const playerNumber = row.cells[0].textContent;
                 const teamName = row.closest('tbody').id === 'team1-players' ? team1 : team2;
     
-                // Enable all buttons for the team whose turn it is to raid
                 btn.disabled = !gameState.isMatchStarted ||
                     (teamName !== (gameState.currentRaidTeam === 'team1' ? team1 : team2));
     
@@ -429,13 +399,11 @@ document.addEventListener('DOMContentLoaded', function (e) {
                 };
             });
     
-            // Reset modal action buttons
             const modalActions = document.querySelectorAll('.action-btn');
             modalActions.forEach(btn => {
                 btn.style.display = 'flex';
             });
     
-            // Re-enable game control buttons if match is ongoing
             endHalfBtn.disabled = !gameState.isMatchStarted;
             timeoutBtn.disabled = !gameState.isMatchStarted;
             allOutBtn.disabled = !gameState.isMatchStarted;
@@ -448,10 +416,8 @@ document.addEventListener('DOMContentLoaded', function (e) {
                 const playerNumber = row.cells[0].textContent;
                 const teamName = row.closest('tbody').id === 'team1-players' ? team1 : team2;
     
-                // Only enable for current raider's team
                 if (teamName === team) {
                     if (playerNumber == raider.number) {
-                        // Raider can add touch/bonus/point
                         btn.disabled = false;
                         btn.innerHTML = '<i class="fas fa-plus-circle"></i> Raid Actions';
                         btn.onclick = () => {
@@ -459,11 +425,9 @@ document.addEventListener('DOMContentLoaded', function (e) {
                             openRaidActionsModal(player, team);
                         };
                     } else {
-                        // Other players in same team disabled
                         btn.disabled = true;
                     }
                 } else {
-                    // Opponent team - only enable tackle for defenders
                     const isDefender = row.cells[2].textContent === 'Defender';
                     btn.disabled = !isDefender;
                     if (isDefender) {
@@ -476,7 +440,6 @@ document.addEventListener('DOMContentLoaded', function (e) {
                 }
             });
     
-            // Disable game control buttons during raid
             endHalfBtn.disabled = true;
             timeoutBtn.disabled = true;
             allOutBtn.disabled = true;
@@ -488,7 +451,6 @@ document.addEventListener('DOMContentLoaded', function (e) {
             selectedTeam = team;
             playerNameElement.innerHTML = `<i class="fas fa-user"></i> ${team.name} - #${player.number} ${player.name} (Raid Actions)`;
     
-            // Only show relevant raid actions
             document.querySelector('[data-action="raid"]').style.display = 'none';
             document.querySelector('[data-action="tackle"]').style.display = 'none';
             document.querySelector('[data-action="touch"]').style.display = 'block';
@@ -508,7 +470,6 @@ document.addEventListener('DOMContentLoaded', function (e) {
             const opponent = team === team1 ? team2 : team1;
     
             if (returnedSuccessfully) {
-                // Player returned successfully - add points for touches/bonus
                 const touches = player.stats.filter(s =>
                     s.type === 'touch' && s.timestamp >= gameState.raidStartTime
                 ).length;
@@ -529,13 +490,11 @@ document.addEventListener('DOMContentLoaded', function (e) {
                     addEventToLog(`${team.name} scored 1 bonus point`);
                 }
             } else {
-                // Player was tackled - opponent gets points
                 opponent.score += 1;
                 sendScoreToServer(opponent, 1);
                 addEventToLog(`${opponent.name} scored 1 point for successful tackle`);
             }
     
-            // Switch raid turn to other team
             gameState.currentRaidTeam = gameState.currentRaidTeam === 'team1' ? 'team2' : 'team1';
             gameState.raidInProgress = false;
             gameState.currentRaider = null;
@@ -558,12 +517,10 @@ document.addEventListener('DOMContentLoaded', function (e) {
             const opponent = team === team1 ? team2 : team1;
     
             if (!successful) {
-                // Raid failed - opponent gets 1 point
                 opponent.score += 1;
                 sendScoreToServer(opponent, 1);
                 addEventToLog(`${opponent.name} gets 1 point for successful tackle`);
             } else {
-                // Calculate points from touches and bonus
                 const touches = player.stats.filter(s =>
                     s.type === 'touch' && s.timestamp >= gameState.raidStartTime
                 ).length;
@@ -583,7 +540,6 @@ document.addEventListener('DOMContentLoaded', function (e) {
                 }
             }
     
-            // Switch raid turn to other team
             gameState.currentRaidTeam = gameState.currentRaidTeam === 'team1' ? 'team2' : 'team1';
             gameState.raidInProgress = false;
             gameState.currentRaider = null;
@@ -597,18 +553,16 @@ document.addEventListener('DOMContentLoaded', function (e) {
             enableAllActionsAfterRaid();
         }
     
-        // Update scoreboard
         function updateScores() {
             team1ScoreElement.textContent = team1.score;
             team2ScoreElement.textContent = team2.score;
         }
     
-        // Start the match
         function startMatch() {
             if (gameState.isMatchStarted) return;
             const dat = {
-                gameStatus: "Live", // e.g., "ongoing", "finished", "scheduled"
-                sportName: "Kabaddi",  // e.g., "football", "cricket", "tennis"
+                gameStatus: "Live", 
+                sportName: "Kabaddi", 
                 matchid: x,
               };
               
@@ -623,7 +577,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
                 if (!response.ok) {
                   throw new Error('Network response was not ok');
                 }
-                return response.json(); // or response.text() if server returns plain text
+                return response.json(); 
               })
               .then(result => {
                 console.log('Server response:', result);
@@ -644,7 +598,6 @@ document.addEventListener('DOMContentLoaded', function (e) {
             allOutBtn.disabled = false;
             startTimerBtn.disabled = false;
     
-            // Enable player action buttons
             updatePlayerActionButtons();
     
             addEventToLog('Match started! First half begins.');
@@ -652,7 +605,6 @@ document.addEventListener('DOMContentLoaded', function (e) {
             currentHalfElement.textContent = gameState.currentHalf;
         }
         function disableAllActionsExceptReturn(raider, team) {
-            // Disable all action buttons except for the current raider
             const actionButtons = document.querySelectorAll('.action-btn-table');
             actionButtons.forEach(btn => {
                 const row = btn.closest('tr');
@@ -666,13 +618,11 @@ document.addEventListener('DOMContentLoaded', function (e) {
                 }
             });
     
-            // Also disable game control buttons during raid
             endHalfBtn.disabled = true;
             timeoutBtn.disabled = true;
             allOutBtn.disabled = true;
         }
     
-        // Start the timer
         function startTimer() {
             if (!gameState.isMatchStarted || gameState.isTimerRunning) return;
     
@@ -687,7 +637,6 @@ document.addEventListener('DOMContentLoaded', function (e) {
             addEventToLog('Match timer started');
         }
     
-        // Pause the timer
         function pauseTimer() {
             if (!gameState.isTimerRunning) return;
     
@@ -700,7 +649,6 @@ document.addEventListener('DOMContentLoaded', function (e) {
             addEventToLog('Match timer paused');
         }
     
-        // Reset the timer
         function resetTimer() {
             pauseTimer();
             gameState.timeRemaining = 1200;
@@ -713,10 +661,9 @@ document.addEventListener('DOMContentLoaded', function (e) {
             addEventToLog('Match timer reset');
         }
     
-        // Update game timer with real-time countdown
         function updateGameTimer() {
             const now = Date.now();
-            const deltaTime = (now - gameState.lastUpdateTime) / 1000; // in seconds
+            const deltaTime = (now - gameState.lastUpdateTime) / 1000;
             gameState.lastUpdateTime = now;
     
             gameState.timeRemaining = Math.max(0, gameState.timeRemaining - deltaTime);
@@ -731,7 +678,6 @@ document.addEventListener('DOMContentLoaded', function (e) {
             }
         }
     
-        // End current half and start next one
         function endHalf() {
             if (!gameState.isMatchStarted) return;
     
@@ -768,7 +714,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
                     if (!response.ok) {
                       throw new Error('Network response was not ok');
                     }
-                    return response.json(); // or response.text() if server returns plain text
+                    return response.json();
                   })
                   .then(result => {
                     console.log('Server response:', result);
@@ -787,19 +733,15 @@ document.addEventListener('DOMContentLoaded', function (e) {
             }
         }
     
-        // Call timeout
         function callTimeout() {
             if (!gameState.isMatchStarted) return;
     
-            // For simplicity, we'll assume the team with more timeouts calls it
             const team = team1.timeouts > team2.timeouts ? team1 : team2;
             if (team.timeouts > 0) {
                 team.timeouts--;
                 timeoutsLeftElement.textContent = Math.min(team1.timeouts, team2.timeouts);
                 addEventToLog(`${team.name} called a timeout (${team.timeouts} remaining)`);
     
-                // Pause the timer during timeout
-                // Pause the timer during timeout
                 if (gameState.isTimerRunning) {
                     pauseTimer();
                 }
@@ -808,15 +750,12 @@ document.addEventListener('DOMContentLoaded', function (e) {
             }
         }
     
-        // Handle all out
         function handleAllOut() {
             if (!gameState.isMatchStarted) return;
     
-            // Ask which team got all out
             const allOutTeam = confirm(`${team1.name} got all out? (OK for ${team1.name}, Cancel for ${team2.name})`) ? team1 : team2;
             const opponent = allOutTeam === team1 ? team2 : team1;
     
-            // Add 2 points to opponent for all out
             opponent.score += 2;
             sendScoreToServer(opponent, 2);
             updateScores();
@@ -824,7 +763,6 @@ document.addEventListener('DOMContentLoaded', function (e) {
             addEventToLog(`ALL OUT! ${allOutTeam.name} is all out. ${opponent.name} gets 2 points`);
         }
     
-        // Event listeners
         closeBtn.addEventListener('click', closeModal);
         modal.addEventListener('click', (e) => {
             if (e.target === modal) closeModal();
@@ -853,14 +791,12 @@ document.addEventListener('DOMContentLoaded', function (e) {
             handlePlayerReturn(false);
             document.getElementById('return-modal').style.display = 'none';
         });
-        // Keyboard shortcuts
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 closeModal();
             }
         });
     
-        // Initialize the app
         function init() {
             team1NameElement.textContent = team1.name;
             team2NameElement.textContent = team2.name;
@@ -870,11 +806,9 @@ document.addEventListener('DOMContentLoaded', function (e) {
             currentHalfElement.textContent = gameState.currentHalf;
             timeoutsLeftElement.textContent = Math.min(team1.timeouts, team2.timeouts);
     
-            // Add welcome message to event log
             addEventToLog('Kabaddi Match Admin is ready. Start the match when ready!');
         }
     
-        // Start the app
         init();
     }
 });

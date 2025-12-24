@@ -4,7 +4,13 @@ const mongoose = require("mongoose");
 const app = express();
 app.use(cors());
 app.use(express.json());
+const path = require("path");
 
+app.use(
+  express.static(
+    path.join(__dirname, "../client")
+  )
+);
 mongoose
   .connect("mongodb://127.0.0.1:27017/sports")
   .then(() => console.log("Launched"))
@@ -23,7 +29,7 @@ const admin = new mongoose.Schema({
 
 const footballTeamSchema = new mongoose.Schema({
   teamname: String,
-  formation: String, // e.g. "4-4-2", "4-3-3", etc.
+  formation: String,
   players: [
     {
       role: String,
@@ -31,17 +37,17 @@ const footballTeamSchema = new mongoose.Schema({
       jerseyNumber: Number,
       name: String,
       position: {
-        primary: String, // e.g. "Goalkeeper", "Center Back", "Striker"
+        primary: String, 
       },
       isCaptain: Boolean,
       isViceCaptain: Boolean,
       age: Number,
-      foot: String, // "Right", "Left", or "Both"
+      foot: String, 
     },
   ],
   teamColors: [String],
-  createdAt: Date, // When this document was created
-  updatedAt: Date, // When this document was last updated
+  createdAt: Date, 
+  updatedAt: Date,
 });
 const basketballTeamSchema = new mongoose.Schema({
   teamname: String,
@@ -57,8 +63,8 @@ const basketballTeamSchema = new mongoose.Schema({
     },
   ],
   teamColors: [String],
-  createdAt: Date, // When this document was created
-  updatedAt: Date, // When this document was last updated
+  createdAt: Date, 
+  updatedAt: Date, 
 })
 const kabaddiTeamSchema = new mongoose.Schema({
   teamname: String,
@@ -71,12 +77,12 @@ const kabaddiTeamSchema = new mongoose.Schema({
       isCaptain: Boolean,
       isViceCaptain: Boolean,
       age: Number,
-      foot: String, // "Right", "Left", or "Both"
+      foot: String, 
     },
   ],
   teamColors: [String],
-  createdAt: Date, // When this document was created
-  updatedAt: Date, // When this document was last updated
+  createdAt: Date, 
+  updatedAt: Date, 
 
 })
 
